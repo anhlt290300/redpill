@@ -8,7 +8,7 @@ import { getCommentByBlogId1 } from "./json/comments-in-blog-id-1";
 
 const UserLayout = () => {
   const recentposts = getAllBlog(5);
-  const comments = getCommentByBlogId1();
+  const comments = getCommentByBlogId1(1);
   const categories = getAllCategory();
   return (
     <div className=" overflow-x-hidden font-mono">
