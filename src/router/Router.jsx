@@ -14,8 +14,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<UserLayout />} errorElement={<Page_404 />}>
-        <Route index element={<Home />} />
-        <Route path="/category/:categoryId" element={<Category />} />
+        <Route element={<Home />} />
+        <Route index path="/category/:categoryId" element={<Category />} />
         <Route
           loader={({ params }) => {
             let blogSlug = params.blogId;
