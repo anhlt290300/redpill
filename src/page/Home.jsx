@@ -1,53 +1,38 @@
-import React from "react";
-import { getAllBlog } from "../json/blogs-all";
-import { getCategoryById } from "../json/categories";
+import React, { useEffect, useState } from "react";
+import { getAllBlog, getBlogPage } from "../json/blogs-all";
 import NavigationPage from "../component/NavigationPage";
+import CardBlog from "../component/CardBlog";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const Home = () => {
-  const blogs = getAllBlog(6);
+  const [blogs, setBlogs] = useState([]);
+  const [search, setSearch] = useSearchParams();
+  const page = Number(search.get("page"));
+  useEffect(() => {
+    if (!page) {
+      setBlogs(getBlogPage(1, 5));
+    } else {
+      setBlogs(getBlogPage(page, 5));
+    }
+  }, [page]);
   return (
     <div className=" flex flex-col">
       <div className="flex flex-col bg-white">
         {blogs.length > 0 &&
           blogs.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="px-12 py-14 border-b last:border-b-0 border-black flex flex-col gap-4 text-lg"
-              >
-                <a
-                  href={`/${getCategoryById(item.categoryId)[0].slugCategory}/${
-                    item.slugBlog
-                  }`}
-                  className="text-2xl font-semibold"
-                >
-                  {item.title}
-                </a>
-                <a
-                  href={`/category/${
-                    getCategoryById(item.categoryId)[0].slugCategory
-                  }`}
-                  className="cursor-pointer hover:text-red-500 text-blue-600"
-                >
-                  {getCategoryById(item.categoryId)[0].category}
-                </a>
-                <p
-                  className="line-clamp"
-                  dangerouslySetInnerHTML={{ __html: item.content }}
-                />
-                <a
-                  className=" cursor-pointer hover:text-red-500 text-blue-600"
-                  href={`/${getCategoryById(item.categoryId)[0].slugCategory}/${
-                    item.slugBlog
-                  }`}
-                >
-                  Read More »
-                </a>
-              </div>
-            );
+            return <CardBlog blog={item} key={index} />;
           })}
       </div>
-      <NavigationPage blogs={blogs} />
+      <NavigationPage
+        currentPage={page ? page : 1}
+        lastPage={
+          getAllBlog().length <= 5
+            ? 1
+            : getAllBlog().length % 5 > 0
+            ? Math.floor(getAllBlog().length / 5) + 1
+            : getAllBlog().length / 5
+        }
+      />
     </div>
   );
 };

@@ -20,4 +20,6 @@ const getAllCategory = () => data;
 
 const getCategoryById = (id) => data.filter((e) => e.id === id);
 
-export { getAllCategory, getCategoryById };
+const getCategoryBySlug = (categorySlug) => data.filter((e) => e.slugCategory === categorySlug)[0];
+
+export { getAllCategory, getCategoryById, getCategoryBySlug };

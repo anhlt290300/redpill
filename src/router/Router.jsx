@@ -15,15 +15,15 @@ const router = createBrowserRouter(
     <Route>
       <Route path="/" element={<UserLayout />} errorElement={<Page_404 />}>
         <Route index element={<Home />} />
-        <Route path="/category/:categoryId" element={<Category />} />
+        <Route path="/category/:categorySlug" element={<Category />} />
         <Route
           loader={({ params }) => {
-            let blogSlug = params.blogId;
-            let categorySlug = params.categoryId;
+            let blogSlug = params.blogSlug;
+            let categorySlug = params.categorySlug;
             let blog = getBlogBySlug(blogSlug);
             return blog;
           }}
-          path="/:categoryId/:blogId"
+          path="/:categorySlug/:blogSlug"
           element={<Blog />}
         />
       </Route>

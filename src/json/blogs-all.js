@@ -102,7 +102,25 @@ const getBlogById = (id) => {
   return data.filter((el) => el.id === id)[0];
 };
 
-const getBlogBySlug = (slug) => {
-  return data.filter((el) => (el.slugBlog = slug))[0];
+const getBlogByCategoryId = (id) => {
+  return data.filter((el) => el.categoryId === id);
 };
-export { getAllBlog, getBlogById, getBlogBySlug };
+
+const getBlogBySlug = (slug) => {
+  return data.filter((el) => el.slugBlog === slug)[0];
+};
+
+const getBlogPage = (page, limit) => {
+  let arr = data.filter(
+    (el, index) => index < page * limit && index >= (page - 1) * limit
+  );
+  return arr;
+};
+
+export {
+  getAllBlog,
+  getBlogById,
+  getBlogBySlug,
+  getBlogByCategoryId,
+  getBlogPage,
+};
