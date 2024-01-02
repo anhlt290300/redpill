@@ -9,7 +9,7 @@ const UserLayout = () => {
   console.log(recentcomment);
   return (
     <div className=" overflow-x-hidden font-mono">
-      <Header />
+      <Header categories={categories} />
       <div className="w-screen bg-blue-50 py-16 h-fit">
         <div className=" container mx-auto grid grid-cols-3 gap-16 px-8 ">
           <div className=" col-span-2 flex flex-col ">

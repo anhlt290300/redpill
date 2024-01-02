@@ -1,7 +1,7 @@
 import React from "react";
-import { getAllCategory } from "../json/categories";
-const Header = () => {
-  const category = getAllCategory();
+import PropTypes from "prop-types";
+
+const Header = ({ categories }) => {
   return (
     <header>
       <section className="w-screen font-mono">
@@ -10,11 +10,15 @@ const Header = () => {
             redpill-UIT
           </a>
           <div className="flex items-center justify-center gap-8 ">
-            {category.length > 0 &&
-              category.map((item, index) => {
+            {categories.length > 0 &&
+              categories.map((item, index) => {
                 if (index < 2)
                   return (
-                    <a className=" last-of-type:text-blue-500 hover:text-red-500" href={`/category/${item.slugCategory}`} key={index}>
+                    <a
+                      className=" last-of-type:text-blue-500 hover:text-red-500"
+                      href={`/category/${item.slugCategory}-${item.id}`}
+                      key={index}
+                    >
                       {item.category}
                     </a>
                   );
@@ -26,4 +30,7 @@ const Header = () => {
   );
 };
 
+Headers.propTypes = {
+  categories: PropTypes.array.isRequired,
+};
 export default Header;
