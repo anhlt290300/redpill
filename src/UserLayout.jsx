@@ -1,15 +1,12 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLoaderData } from "react-router-dom";
 import Header from "./pasts/Header";
 import Footer from "./pasts/Footer";
-import { getAllBlog, getBlogById } from "./json/blogs-all";
-import { getAllCategory, getCategoryById } from "./json/categories";
-import { getCommentByBlogId1 } from "./json/comments-in-blog-id-1";
 
 const UserLayout = () => {
-  const recentposts = getAllBlog(5);
-  const comments = getCommentByBlogId1(1);
-  const categories = getAllCategory();
+  //const comments = getCommentByBlogId1(1);
+  const { categories, recentposts, recentcomment } = useLoaderData();
+  console.log(recentcomment);
   return (
     <div className=" overflow-x-hidden font-mono">
       <Header />
@@ -41,9 +38,7 @@ const UserLayout = () => {
                 recentposts.map((item, index) => {
                   return (
                     <a
-                      href={`/${
-                        getCategoryById(item.categoryId)[0].slugCategory
-                      }/${item.slugBlog}`}
+                      href={`/${item.slugBlog}`}
                       key={index}
                       className="text-lg text-blue-600 hover:text-red-500"
                     >
@@ -55,24 +50,20 @@ const UserLayout = () => {
             {/* Recent Comments */}
             <div className="flex flex-col gap-4">
               <p className="text-2xl font-semibold mb-2">Recent Comments</p>
-              {comments.length > 0 &&
-                comments.map((item, index) => {
+              {recentcomment.length > 0 &&
+                recentcomment.map((item, index) => {
                   return (
                     <div
                       key={index}
                       className="flex items-center whitespace-nowrap gap-1"
                     >
-                      <p>{item.data.name} on</p>
+                      <p>{item.name} on</p>
                       <a
-                        href={`/${
-                          getCategoryById(
-                            getBlogById(item.data.blogId).categoryId
-                          )[0].slugCategory
-                        }/${getBlogById(item.data.blogId).slugBlog}`}
+                        href={`/`}
                         key={index}
                         className="text-lg text-blue-600 hover:text-red-500"
                       >
-                        {getBlogById(item.data.blogId).title}
+                        {/* {getBlogById(item.blogId).title} */}
                       </a>
                     </div>
                   );
@@ -85,7 +76,7 @@ const UserLayout = () => {
                 categories.map((item, index) => {
                   return (
                     <a
-                      href={`/category/${item.slugCategory}`}
+                      href={`/category/${item.slugCategory}-${item.id}`}
                       key={index}
                       className="text-lg text-blue-600 hover:text-red-500"
                     >

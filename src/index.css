@@ -30,3 +30,7 @@ h5 {
   padding-left: 1rem;
 }
 
+.content figure {
+  width: fit-content !important;
+}
+

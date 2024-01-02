@@ -9,22 +9,84 @@ import Home from "../page/Home";
 import Blog from "../page/Blog";
 import Category from "../page/Category";
 import UserLayout from "../UserLayout";
-import { getBlogBySlug } from "../json/blogs-all";
+import {
+  getAllBlog,
+  getBlogByCategoryId,
+  getBlogBySlug,
+  getRecentBlogs,
+} from "../json/blogs-all";
+import { getAllCategory, getCategoryById } from "../json/categories";
+import {
+  getCommentByBlogId,
+  getRecentComment,
+} from "../json/comments-in-blog-id-1";
+import { getID } from "../utils/string";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<UserLayout />} errorElement={<Page_404 />}>
-        <Route index element={<Home />} />
-        <Route path="/category/:categorySlug" element={<Category />} />
+      <Route
+        path="/"
+        loader={async () => {
+          let categories = await getAllCategory();
+          let recentposts = await getRecentBlogs();
+          let recentcomment = await getRecentComment();
+          return { categories, recentposts, recentcomment };
+        }}
+        element={<UserLayout />}
+        errorElement={<Page_404 />}
+      >
         <Route
-          loader={({ params }) => {
-            let blogSlug = params.blogSlug;
+          index
+          loader={async () => {
+            let blogs = await getAllBlog({ page: 1 });
+            return { blogs };
+          }}
+          element={<Home />}
+        />
+        <Route
+          path="/category/:categorySlug"
+          loader={async ({ params }) => {
+            //console.log(params);
             let categorySlug = params.categorySlug;
-            let blog = getBlogBySlug(blogSlug);
-            return blog;
+            let categoryId = getID(categorySlug);
+            let category = await getCategoryById(categoryId);
+            let blogs = await getBlogByCategoryId({ id: categoryId });
+            return { blogs, category };
+          }}
+          element={<Category />}
+        />
+        <Route
+          loader={async ({ params }) => {
+            let blogSlug = params.blogSlug;
+            let blog = await getBlogBySlug(blogSlug);
+            let blogId = blog.blogsResponseModel.id;
+            let comment = await getCommentByBlogId(blogId);
+            return { blog, comment };
           }}
           path="/:categorySlug/:blogSlug"
           element={<Blog />}
+        />
+      </Route>
+      <Route
+        path="/page/:page"
+        loader={async () => {
+          let categories = await getAllCategory();
+
+          return { categories };
+        }}
+        element={<UserLayout />}
+        errorElement={<Page_404 />}
+      >
+        <Route
+          index
+          loader={async ({ params }) => {
+            let page = params.page;
+            if (page < 1) page = 1;
+            let blogs = await getAllBlog({ page: page });
+
+            return { blogs };
+          }}
+          element={<Home />}
         />
       </Route>
     </Route>

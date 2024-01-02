@@ -2,36 +2,33 @@ import React from "react";
 import { getBlogByCategoryId } from "../json/blogs-all";
 import CardBlog from "../component/CardBlog";
 import NavigationPage from "../component/NavigationPage";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useLoaderData, useParams, useSearchParams } from "react-router-dom";
 import { getCategoryBySlug } from "../json/categories";
 
 const Category = () => {
-  const { categorySlug } = useParams();
-  const category = getCategoryBySlug(categorySlug);
-  const blogs = getBlogByCategoryId(category.id);
-  const [search, setSearch] = useSearchParams();
-  const page = Number(search.get("page"));
+  const { blogs, category } = useLoaderData();
+
+  console.log(blogs);
+
   return (
     <div className=" flex flex-col">
       <div className="flex flex-col bg-white ">
-        <div className="px-12 py-16 text-3xl font-semibold border-b border-black">
+        <div className="px-12 py-16 text-3xl font-semibold border-b border-black flex flex-col gap-4">
+          <p className="flex items-center justify-start text-base gap-2 font-normal">
+            <a href="/" className=" text-blue-600">
+              Home
+            </a>
+            <span>»</span>
+            <span>{category.category}</span>
+          </p>
           <p>{category.category}</p>
         </div>
-        {blogs.length > 0 &&
-          blogs.map((item, index) => {
+        {blogs.listResult.length > 0 &&
+          blogs.listResult.map((item, index) => {
             return <CardBlog blog={item} key={index} />;
           })}
       </div>
-      <NavigationPage
-        currentPage={page ? page : 1}
-        lastPage={
-          blogs.length <= 5
-            ? 1
-            : blogs.length % 5 > 0
-            ? Math.floor(blogs.length / 5) + 1
-            : blogs.length / 5
-        }
-      />
+      <NavigationPage currentPage={blogs.page} lastPage={blogs.totalPage} />
     </div>
   );
 };

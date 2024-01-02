@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const data = [
   {
     id: 1,
@@ -16,10 +18,36 @@ const data = [
   },
 ];
 
-const getAllCategory = () => data;
+const getAllCategory = async (page = 1) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-categories?page=${page}`
+    );
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
+};
 
-const getCategoryById = (id) => data.filter((e) => e.id === id);
+const getCategoryById = async (id = 1) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-categories/findOneById/${id}`
+    );
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
+};
 
-const getCategoryBySlug = (categorySlug) => data.filter((e) => e.slugCategory === categorySlug)[0];
-
+const getCategoryBySlug = async (slugCategory) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-categories/findOneBySlug/${slugCategory}`
+    );
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
+};
 export { getAllCategory, getCategoryById, getCategoryBySlug };

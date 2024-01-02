@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const data = [
   {
     data: {
@@ -71,5 +73,56 @@ const data = [
   },
 ];
 
-export const getCommentByBlogId1 = (id) =>
-  data.filter((el) => el.data.blogId === id);
+const getRecentComment = async () => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-comments/recent`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
+};
+
+const getCommentByBlogId = async (id) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-comments/findOneByBlogId/${id}`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
+};
+
+const postComment = async ({
+  blogId,
+  name,
+  email,
+  website,
+  content,
+  parentId,
+  commentDate,
+}) => {
+  try {
+    let post = axios.post(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-comments`,
+      {
+        blogId: blogId,
+        name: name,
+        email: email,
+        website: website,
+        content: content,
+        parentId: parentId,
+        commentDate: commentDate,
+      }
+    );
+
+    return (await post).data;
+  } catch (error) {
+    return null;
+  }
+};
+export { getCommentByBlogId, postComment, getRecentComment };

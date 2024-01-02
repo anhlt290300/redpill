@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const data = [
   {
     id: 1,
@@ -89,32 +91,55 @@ const data = [
   },
 ];
 
-const getAllBlog = (number) => {
-  if (number) {
-    let rs = [];
-    data.forEach((e, index) => {
-      if (index < number) rs.push(e);
-    });
-    return rs;
-  } else return data;
+const getAllBlog = async ({ page = 1 }) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-blogs?page=${page}`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
 };
 const getBlogById = (id) => {
   return data.filter((el) => el.id === id)[0];
 };
 
-const getBlogByCategoryId = (id) => {
-  return data.filter((el) => el.categoryId === id);
+const getBlogByCategoryId = async ({ id = 1, page = 1 }) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-blogs/findByCategoryId/${id}?page=${page}`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
 };
 
-const getBlogBySlug = (slug) => {
-  return data.filter((el) => el.slugBlog === slug)[0];
+const getBlogBySlug = async (slug) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-blogs/findOneBySlug/${slug}`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
 };
 
-const getBlogPage = (page, limit) => {
-  let arr = data.filter(
-    (el, index) => index < page * limit && index >= (page - 1) * limit
-  );
-  return arr;
+const getRecentBlogs = async () => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-blogs/recent`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
 };
 
 export {
@@ -122,5 +147,5 @@ export {
   getBlogById,
   getBlogBySlug,
   getBlogByCategoryId,
-  getBlogPage,
+  getRecentBlogs,
 };

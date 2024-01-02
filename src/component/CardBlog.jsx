@@ -1,40 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { getCategoryById } from "../json/categories";
-import { getCommentByBlogId1 } from "../json/comments-in-blog-id-1";
 
-const CardBlog = ({blog}) => {
+const CardBlog = ({ blog }) => {
+  const { blogsResponseModel, categoriesResponseModel, totalComment } = blog;
   return (
-    <div
-      className="px-12 py-14 border-b last:border-b-0 border-black flex flex-col gap-4 text-lg"
-    >
+    <div className="px-12 py-14 border-b last:border-b-0 border-black flex flex-col gap-4 text-lg">
       <a
-        href={`/${getCategoryById(blog.categoryId)[0].slugCategory}/${
-            blog.slugBlog
-        }`}
+        href={`/${categoriesResponseModel.slugCategory}-${categoriesResponseModel.id}/${blogsResponseModel.slugBlog}`}
         className="text-2xl font-semibold"
       >
-        {blog.title}
+        {blogsResponseModel.title}
       </a>
       <a
-        href={`/category/${getCategoryById(blog.categoryId)[0].slugCategory}`}
+        href={`/category/${categoriesResponseModel.slugCategory}-${categoriesResponseModel.id}`}
         className="cursor-pointer hover:text-red-500 text-blue-600"
       >
         {`${
-          getCommentByBlogId1(blog.id).length > 0
-            ? getCommentByBlogId1(blog.id).length + " Comments"
-            : "Leave a Comment"
-        } / ${getCategoryById(blog.categoryId)[0].category}`}
+          totalComment > 0 ? totalComment + " Comments" : "Leave a Comment"
+        } / ${categoriesResponseModel.category}`}
       </a>
       <p
         className="line-clamp"
-        dangerouslySetInnerHTML={{ __html: blog.content }}
+        dangerouslySetInnerHTML={{ __html: blogsResponseModel.content }}
       />
       <a
         className=" cursor-pointer hover:text-red-500 text-blue-600"
-        href={`/${getCategoryById(blog.categoryId)[0].slugCategory}/${
-            blog.slugBlog
-        }`}
+        href={`/${categoriesResponseModel.slugCategory}-${categoriesResponseModel.id}/${blogsResponseModel.slugBlog}`}
       >
         Read More »
       </a>

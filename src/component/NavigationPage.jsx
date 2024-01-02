@@ -4,31 +4,40 @@ import ReactPaginate from "react-paginate";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const NavigationPage = ({ currentPage, lastPage }) => {
-  const arr = Array(lastPage);
-  const navigate = useNavigate();
-  const url = useLocation().pathname;
-  const [page, setPage] = useState(currentPage);
-  useEffect(() => {
-    if (page !== currentPage) navigate(`${url}?page=${page}`);
-  }, [page]);
-
-  const handlePageClick = (event) => {
-    if (event.selected + 1 !== page) setPage(event.selected + 1);
-  };
-
+  let url = useLocation().pathname;
+  url = url.slice(0, url.lastIndexOf("/") + 1);
+  let arr = [];
+  for (let i = 0; i < lastPage; i++) {
+    arr.push(i + 1);
+  }
   return (
-    <div className="px-36 pt-8 flex justify-center items-center relative ">
-      <ReactPaginate
-        className={lastPage === 1 ? "hidden" : "flex navigation gap-6"}
-        previousLabel={null}
-        nextLabel={null}
-        breakLabel="..."
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={-2}
-        pageCount={lastPage}
-        activeLinkClassName="w-10 h-10 rounded bg-blue-600 text-center text-white leading-10 font-semibold text-lg block cursor-default"
-        pageClassName="leading-10  text-lg block text-blue-600"
-      />
+    <div className="px-36 pt-8 flex justify-center items-center relative  gap-2">
+      {arr.length > 1 &&
+        arr.map((item, index) => {
+          if (item === currentPage)
+            return (
+              <span
+                key={index}
+                className={
+                  "w-10 h-10 rounded bg-blue-600 text-center text-white leading-10 font-semibold text-lg block cursor-default"
+                }
+              >
+                {item}
+              </span>
+            );
+          else
+            return (
+              <a
+                key={index}
+                className={
+                  "leading-10  text-lg block text-blue-600 w-10 h-10 text-center"
+                }
+                href={`${"/page/" + item}`}
+              >
+                {item}
+              </a>
+            );
+        })}
     </div>
   );
 };
