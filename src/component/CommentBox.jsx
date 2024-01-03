@@ -7,7 +7,9 @@ const CommentBox = ({ blogId }) => {
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
   const [content, setContent] = useState("");
-  const commentDate = new Date().toLocaleDateString("en-US");
+  // const commentDate = new Date().toLocaleDateString("en-US");
+  const commentDate = new Date().getTime();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let parentId = null;
