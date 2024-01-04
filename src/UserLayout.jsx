@@ -53,19 +53,20 @@ const UserLayout = () => {
               {recentcomment.length > 0 &&
                 recentcomment.map((item, index) => {
                   return (
-                    <div
+                    <p
                       key={index}
-                      className="flex items-center whitespace-nowrap gap-1"
+                      className="whitespace-normal"
                     >
-                      <p>{item.name} on</p>
+                      <span className="whitespace-nowrap">{item.name}</span>
+                      <span className="mx-2">on</span>
                       <a
-                        href={`/`}
+                        href={`/${item.blog.slugCategory}-${item.blog.categoryId}/${item.blog.slugBlog}`}
                         key={index}
                         className="text-lg text-blue-600 hover:text-red-500"
                       >
-                        {/* {getBlogById(item.blogId).title} */}
+                        {item.blog.title}
                       </a>
-                    </div>
+                    </p>
                   );
                 })}
             </div>

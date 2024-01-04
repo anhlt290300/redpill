@@ -23,20 +23,25 @@ const CommentBox = ({ blogId }) => {
       commentDate,
       parentId,
     });
+    window.location.reload();
   };
   return (
     <form
+      id="commentbox"
       onSubmit={(e) => handleSubmit(e)}
       className="flex flex-col bg-white px-12 py-14 gap-6"
     >
       <p className="flex flex-col gap-2">
-        <span className="text-3xl">Leave a Comment</span>
+        <span id="titlecomment" className="text-3xl">
+          Leave a Comment
+        </span>
         <span className=" opacity-80">
           Your email address will not be published. Required fields are marked *
         </span>
       </p>
       <textarea
         placeholder="Type here..."
+        id="content"
         cols="30"
         rows="10"
         name="content"
@@ -44,11 +49,11 @@ const CommentBox = ({ blogId }) => {
           let content_ = e.target.value;
           setContent(content_);
         }}
-        className=" outline-none px-2 py-4 border border-black rounded"
+        className=" outline-black px-2 py-4 border border-black placeholder:text-black placeholder:font-semibold rounded"
       />
       <div className=" grid grid-cols-3 gap-6">
         <input
-          className="p-2 outline-none rounded border border-black"
+          className="p-2 outline-black rounded border border-black placeholder:text-black placeholder:font-semibold"
           type="text"
           name="name"
           placeholder="Name*"
@@ -58,7 +63,7 @@ const CommentBox = ({ blogId }) => {
           }}
         />
         <input
-          className="p-2 outline-none rounded border border-black"
+          className="p-2 outline-black rounded border border-black placeholder:text-black placeholder:font-semibold"
           type="email"
           name="email"
           placeholder="Email*"
@@ -68,10 +73,10 @@ const CommentBox = ({ blogId }) => {
           }}
         />
         <input
-          className="p-2 outline-none rounded border border-black"
+          className="p-2 outline-black rounded border border-black placeholder:text-black placeholder:font-semibold"
           type="text"
           name="website"
-          placeholder="Website"
+          placeholder="Website*"
           onChange={(e) => {
             let website_ = e.target.value;
             setWebsite(website_);

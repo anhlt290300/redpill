@@ -71,8 +71,9 @@ const router = createBrowserRouter(
         path="/page/:page"
         loader={async () => {
           let categories = await getAllCategory();
-
-          return { categories };
+          let recentposts = await getRecentBlogs();
+          let recentcomment = await getRecentComment();
+          return { categories, recentposts, recentcomment };
         }}
         element={<UserLayout />}
         errorElement={<Page_404 />}

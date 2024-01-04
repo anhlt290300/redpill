@@ -3,16 +3,19 @@ import { useLoaderData } from "react-router-dom";
 import { getCategoryById } from "../json/categories";
 import CommentBox from "../component/CommentBox";
 
-
 const Blog = () => {
   const { blog, comment } = useLoaderData();
   const { blogsResponseModel, categoriesResponseModel, totalComment } = blog;
-  const formattedString = blogsResponseModel.content.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+  const formattedString = blogsResponseModel.content
+    .replace(/\\n/g, "\n")
+    .replace(/\\t/g, "\t");
 
   // Hàm để định dạng commentDate
   function formatCommentDate(commentDate) {
     const date = new Date(commentDate);
-    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} AT ${formatAMPM(date)}`;
+    const formattedDate = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()} AT ${formatAMPM(date)}`;
     return formattedDate;
   }
 
@@ -20,27 +23,19 @@ const Blog = () => {
   function formatAMPM(date) {
     let hours = date.getHours();
     let minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12; // 0 giờ chuyển thành 12 giờ
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    const strTime = hours + ':' + minutes + ' ' + ampm;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    const strTime = hours + ":" + minutes + " " + ampm;
     return strTime;
   }
 
   const Comment = ({ comment }) => {
-    
     const { data, children } = comment;
-    const {
-      id,
-      blogId,
-      name,
-      email,
-      website,
-      content,
-      parentId,
-      commentDate} = data;
-  
+    const { id, blogId, name, email, website, content, parentId, commentDate } =
+      data;
+
     return (
       <div>
         <div className=" flex flex-col gap-4 mt-4">
@@ -57,7 +52,22 @@ const Blog = () => {
           </div>
           <p>{data.content}</p>
           <div className="flex justify-end text-blue-600">
-            <button>Reply</button>
+            <button
+              onClick={() => {
+                const commentbox = document.getElementById("commentbox");
+                const content = document.getElementById("content");
+                const titlecomment = document.getElementById("titlecomment");
+                if (comment) {
+                  commentbox.scrollIntoView({ behavior: "smooth" });
+                  titlecomment.innerText = "Reply a Comment";
+                  setTimeout(() => {
+                    content.focus();
+                  }, 300);
+                }
+              }}
+            >
+              Reply
+            </button>
           </div>
         </div>
 
@@ -71,12 +81,15 @@ const Blog = () => {
       </div>
     );
   };
-  
-  const CommentTree = ({ comments }) => {
+
+  const CommentTree = ({ comments, blogId }) => {
     return (
       <div className="mb-8">
         {comments.map((comment, index) => (
-          <div key={index} className="flex flex-col px-12 py-14 bg-white mb-8 last:mb-0 justify-start">
+          <div
+            key={index}
+            className="flex flex-col px-12 py-14 bg-white mb-8 last:mb-0 justify-start"
+          >
             {index === 0 && (
               <h1 className="text-2xl mb-8">
                 {totalComment} thoughts on "{blogsResponseModel.title}"
@@ -85,6 +98,7 @@ const Blog = () => {
             <Comment comment={comment} />
           </div>
         ))}
+        <CommentBox blogId={blogId} />
       </div>
     );
   };
@@ -128,94 +142,10 @@ const Blog = () => {
         </p>
       </div>
       <p id="comment"></p>
-      {/* {totalComment > 0 &&
-        comment.map((item, index) => {
-          return (
-            <div
-              key={index}
-              className="flex flex-col px-12 py-14 bg-white mb-8 last:mb-0 justify-start"
-            >
-              {index === 0 && (
-                <h1 className="text-2xl mb-8">
-                  {totalComment} thoughts on "{blogsResponseModel.title}"
-                </h1>
-              )}
-              <div className=" flex flex-col gap-4 mt-4">
-                <div className="flex items-center justify-start gap-6">
-                  <img
-                    src="https://secure.gravatar.com/avatar/7b0c4f46bd52af461738ee0f780de10d?s=50&d=mm&r=g"
-                    className=" rounded-full"
-                    alt=""
-                  />
-                  <div className=" flex flex-col text-blue-600">
-                    <h3 className=" font-semibold">{item.data.name}</h3>
-                    <p>{item.data.commentDate}</p>
-                  </div>
-                </div>
-                <p>{item.data.content}</p>
-                <div className="flex justify-end text-blue-600">
-                  <button>Reply</button>
-                </div>
-              </div>
-              {item.children.length > 0 &&
-                item.children.map((item_, index_) => {
-                  return (
-                    <div
-                      key={index_}
-                      className=" flex flex-col gap-4 mt-4 px-8"
-                    >
-                      <div className="flex items-center justify-start gap-6">
-                        <img
-                          src="https://secure.gravatar.com/avatar/7b0c4f46bd52af461738ee0f780de10d?s=50&d=mm&r=g"
-                          className=" rounded-full"
-                          alt=""
-                        />
-                        <div className=" flex flex-col text-blue-600">
-                          <h3 className=" font-semibold">{item_.data.name}</h3>
-                          <p>{formatCommentDate(item_.data.commentDate)}</p>
-                        </div>
-                      </div>
-                      <p>{item_.data.content}</p>
-                      <div className="flex justify-end text-blue-600">
-                        <button>Reply</button>
-                      </div>
-                      {item_.children.length > 0 &&
-                        item_.children.map((item__, index__) => {
-                          return (
-                            <div
-                              key={index__}
-                              className=" flex flex-col gap-4 mt-4 px-8"
-                            >
-                              <div className="flex items-center justify-start gap-6">
-                                <img
-                                  src="https://secure.gravatar.com/avatar/7b0c4f46bd52af461738ee0f780de10d?s=50&d=mm&r=g"
-                                  className=" rounded-full"
-                                  alt=""
-                                />
-                                <div className=" flex flex-col text-blue-600">
-                                  <h3 className=" font-semibold">
-                                    {item__.data.name}
-                                  </h3>
-                                  <p>{item__.data.commentDate}</p>
-                                </div>
-                              </div>
-                              <p>{item__.data.content}</p>
-                              <div className="flex justify-end text-blue-600">
-                                <button>Reply</button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  );
-                })}
-            </div>
-          );
-        })} */}
 
-      {totalComment > 0 && <CommentTree comments={comment}/>}
-      
-      <CommentBox blogId={blogsResponseModel.id} />
+      {totalComment > 0 && (
+        <CommentTree comments={comment} blogId={blogsResponseModel.id} />
+      )}
     </div>
   );
 };
