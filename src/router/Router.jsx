@@ -21,6 +21,7 @@ import {
   getRecentComment,
 } from "../json/comments-in-blog-id-1";
 import { getID } from "../utils/string";
+import Search from "../page/Search";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -65,6 +66,15 @@ const router = createBrowserRouter(
           }}
           path="/:categorySlug/:blogSlug"
           element={<Blog />}
+        />
+        <Route
+          loader={async ({ params }) => {
+            let key = params.key;
+
+            return true;
+          }}
+          path="/search/:key"
+          element={<Search />}
         />
       </Route>
       <Route

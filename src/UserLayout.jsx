@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import Header from "./pasts/Header";
 import Footer from "./pasts/Footer";
@@ -6,7 +6,7 @@ import Footer from "./pasts/Footer";
 const UserLayout = () => {
   //const comments = getCommentByBlogId1(1);
   const { categories, recentposts, recentcomment } = useLoaderData();
-  console.log(recentcomment);
+  const [search, setSearch] = useState("");
   return (
     <div className=" overflow-x-hidden font-mono">
       <Header categories={categories} />
@@ -21,10 +21,12 @@ const UserLayout = () => {
               <div className="flex justify-between items-center gap-4">
                 <input
                   type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   className="px-2 py-2 w-full rounded border border-black outline-none focus:outline-dotted focus:outline-blue-600 focus:border-0"
                 />
                 <a
-                  href="/search"
+                  href={`/search/${search}`}
                   className="px-6 py-2 bg-blue-600 text-white font-semibold rounded"
                 >
                   Search
@@ -53,10 +55,7 @@ const UserLayout = () => {
               {recentcomment.length > 0 &&
                 recentcomment.map((item, index) => {
                   return (
-                    <p
-                      key={index}
-                      className="whitespace-normal"
-                    >
+                    <p key={index} className="whitespace-normal">
                       <span className="whitespace-nowrap">{item.name}</span>
                       <span className="mx-2">on</span>
                       <a
