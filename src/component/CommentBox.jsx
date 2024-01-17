@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { postComment } from "../json/comments-in-blog-id-1";
 
-const CommentBox = ({ blogId }) => {
+const CommentBox = ({ blogId, isReply=false , parentId = null}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
@@ -12,8 +12,7 @@ const CommentBox = ({ blogId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let parentId = null;
-    console.log(website);
+    
     await postComment({
       blogId,
       name,
@@ -32,12 +31,15 @@ const CommentBox = ({ blogId }) => {
       className="flex flex-col bg-white px-12 py-14 gap-6"
     >
       <p className="flex flex-col gap-2">
-        <span id="titlecomment" className="text-3xl">
+        {!isReply && <span id="titlecomment" className="text-3xl">
           Leave a Comment
-        </span>
-        <span className=" opacity-80">
+        </span>}
+        {isReply && <span id="titlecomment" className="text-3xl">
+          Reply a Comment
+        </span>}
+        {!isReply && <span className=" opacity-80">
           Your email address will not be published. Required fields are marked *
-        </span>
+        </span>}
       </p>
       <textarea
         placeholder="Type here..."
@@ -83,13 +85,13 @@ const CommentBox = ({ blogId }) => {
           }}
         />
       </div>
-      <div className="flex gap-4 items-center whitespace-nowrap tracking-tight">
+      {/* <div className="flex gap-4 items-center whitespace-nowrap tracking-tight">
         <input type="checkbox" />
         <p>
           Save my name, email, and website in this browser for the next time I
           comment.
         </p>
-      </div>
+      </div> */}
       <button className="px-8 py-2 rounded bg-blue-600 text-center text-white font-semibold w-fit">
         Post Comment
       </button>

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import Header from "./pasts/Header";
 import Footer from "./pasts/Footer";
+import { getRecentComment } from "./json/comments-in-blog-id-1";
 
 const UserLayout = () => {
-  //const comments = getCommentByBlogId1(1);
+  // const comments = getRecentComment();
   const { categories, recentposts, recentcomment } = useLoaderData();
   console.log(recentcomment);
   const [search, setSearch] = useState("");
@@ -51,7 +52,7 @@ const UserLayout = () => {
                 })}
             </div>
             {/* Recent Comments */}
-            {/* <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
               <p className="text-2xl font-semibold mb-2">Recent Comments</p>
               {recentcomment.length > 0 &&
                 recentcomment.map((item, index) => {
@@ -69,7 +70,7 @@ const UserLayout = () => {
                     </p>
                   );
                 })}
-            </div> */}
+            </div>
             {/* Categories */}
             <div className="flex flex-col gap-4">
               <p className="text-2xl font-semibold mb-2">Categories</p>

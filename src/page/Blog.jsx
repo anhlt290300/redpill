@@ -2,9 +2,11 @@ import React from "react";
 import { useLoaderData } from "react-router-dom";
 import { getCategoryById } from "../json/categories";
 import CommentBox from "../component/CommentBox";
+import Comment from "../component/Comment";
 
 const Blog = () => {
   const { blog, comment } = useLoaderData();
+  console.log(blog);
   const { blogsResponseModel, categoriesResponseModel, totalComment } = blog;
   const formattedString = blogsResponseModel.content
     .replace(/\\n/g, "\n")
@@ -31,60 +33,54 @@ const Blog = () => {
     return strTime;
   }
 
-  const Comment = ({ comment }) => {
-    const { data, children } = comment;
-    const { id, blogId, name, email, website, content, parentId, commentDate } =
-      data;
+  // const Comment = ({ comment }) => {
+  //   const { data, children } = comment;
+  //   const { id, blogId, name, email, website, content, parentId, commentDate } =  data;    
 
-    return (
-      <div>
-        <div className=" flex flex-col gap-4 mt-4">
-          <div className="flex items-center justify-start gap-6">
-            <img
-              src="https://secure.gravatar.com/avatar/7b0c4f46bd52af461738ee0f780de10d?s=50&d=mm&r=g"
-              className=" rounded-full"
-              alt=""
-            />
-            <div className=" flex flex-col text-blue-600">
-              <h3 className=" font-semibold">{data.name}</h3>
-              <p>{formatCommentDate(data.commentDate)}</p>
-            </div>
-          </div>
-          <p>{data.content}</p>
-          <div className="flex justify-end text-blue-600">
-            <button
-              onClick={() => {
-                const commentbox = document.getElementById("commentbox");
-                const content = document.getElementById("content");
-                const titlecomment = document.getElementById("titlecomment");
-                if (comment) {
-                  commentbox.scrollIntoView({ behavior: "smooth" });
-                  titlecomment.innerText = "Reply a Comment";
-                  setTimeout(() => {
-                    content.focus();
-                  }, 300);
-                }
-              }}
-            >
-              Reply
-            </button>
-          </div>
-        </div>
+  //   const [isReply, setIsReply] = useState(false);
 
-        {children && children.length > 0 && (
-          <div className=" flex flex-col gap-4 mt-4 px-8">
-            {children.map((item, index) => (
-              <Comment key={index} comment={item} />
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
+  //   return (
+  //     <div>
+  //       <div className=" flex flex-col gap-4 mt-4">
+  //         <div className="flex items-center justify-start gap-6">
+  //           <img
+  //             src="https://secure.gravatar.com/avatar/7b0c4f46bd52af461738ee0f780de10d?s=50&d=mm&r=g"
+  //             className=" rounded-full"
+  //             alt=""
+  //           />
+  //           <div className=" flex flex-col text-blue-600">
+  //             <h3 className=" font-semibold">{data.name}</h3>
+  //             <p>{formatCommentDate(data.commentDate)}</p>
+  //           </div>
+  //         </div>
+  //         <p>{data.content}</p>
+  //         <div className="flex justify-end text-blue-600">
+  //           <button
+  //             onClick={() => {
+  //               setIsReply(!isReply);
+  //               console.log(isReply, data.parentId);
+  //             }}
+  //           >
+  //             Reply
+  //           </button>
+  //         </div>
+  //         <CommentBox blogId={blog.blogsResponseModel.id} isReply={true} parentId={data.parentId}/>
+  //       </div>
+
+  //       {children && children.length > 0 && (
+  //         <div className=" flex flex-col gap-4 mt-4 px-8">
+  //           {children.map((item, index) => (
+  //             <Comment key={index} comment={item} />
+  //           ))}
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // };
 
   const CommentTree = ({ comments, blogId }) => {
     return (
-      <div className="mb-8">
+      <div className="mb-8 mt-8">
         {comments.map((comment, index) => (
           <div
             key={index}
@@ -98,7 +94,6 @@ const Blog = () => {
             <Comment comment={comment} />
           </div>
         ))}
-        <CommentBox blogId={blogId} />
       </div>
     );
   };
@@ -142,6 +137,7 @@ const Blog = () => {
         </p>
       </div>
       <p id="comment"></p>
+      <CommentBox blogId={blog.blogsResponseModel.id} />
 
       {totalComment > 0 && (
         <CommentTree comments={comment} blogId={blogsResponseModel.id} />
