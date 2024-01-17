@@ -142,10 +142,23 @@ const getRecentBlogs = async () => {
   }
 };
 
+const searchBlogByKey = async ({ key, page = 1 }) => {
+  try {
+    let get = axios.get(
+      `http://estatemanage.laptrinhjavawebsoftware.com/api-admin-blogs/search?key=${key}&page=${page}`
+    );
+
+    return (await get).data;
+  } catch (error) {
+    return [];
+  }
+};
+
 export {
   getAllBlog,
   getBlogById,
   getBlogBySlug,
   getBlogByCategoryId,
   getRecentBlogs,
+  searchBlogByKey,
 };

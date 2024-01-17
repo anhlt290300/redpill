@@ -14,6 +14,7 @@ import {
   getBlogByCategoryId,
   getBlogBySlug,
   getRecentBlogs,
+  searchBlogByKey,
 } from "../json/blogs-all";
 import { getAllCategory, getCategoryById } from "../json/categories";
 import {
@@ -70,10 +71,26 @@ const router = createBrowserRouter(
         <Route
           loader={async ({ params }) => {
             let key = params.key;
-
-            return true;
+            let blogs = await searchBlogByKey({ key: key });
+            return {
+              blogs: blogs,
+              key: key,
+            };
           }}
           path="/search/:key"
+          element={<Search />}
+        />
+        <Route
+          loader={async ({ params }) => {
+            let key = params.key;
+            let page = params.page;
+            let blogs = await searchBlogByKey({ key: key, page: page });
+            return {
+              blogs: blogs,
+              key: key,
+            };
+          }}
+          path="/search/:key/page/:page"
           element={<Search />}
         />
       </Route>

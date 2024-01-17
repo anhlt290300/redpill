@@ -6,7 +6,12 @@ const Header = ({ categories }) => {
     <header>
       <section className="w-screen font-mono">
         <div className=" container mx-auto px-8 py-6 flex items-center justify-between">
-          <a href="/" className="text-2xl font-semibold">
+          <a href="/" className="text-2xl font-semibold flex items-center gap-3">
+            <img
+              className="w-10 aspect-square"
+              src="https://st.depositphotos.com/38923194/53981/v/450/depositphotos_539814560-stock-illustration-dogecoin-doge-cryptocurrency-isolated-white.jpg"
+              alt=""
+            />{" "}
             redpill-UIT
           </a>
           <div className="flex items-center justify-center gap-8 ">

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 const NavigationPage = ({ currentPage, lastPage }) => {
   let url = useLocation().pathname;
-  url = url.slice(0, url.lastIndexOf("/") + 1);
+  let page = useParams().page;
+
   let arr = [];
   for (let i = 0; i < lastPage; i++) {
     arr.push(i + 1);
@@ -32,7 +39,11 @@ const NavigationPage = ({ currentPage, lastPage }) => {
                 className={
                   "leading-10  text-lg block text-blue-600 w-10 h-10 text-center"
                 }
-                href={`${"/page/" + item}`}
+                href={
+                  !page
+                    ? `${url === "/" ? "" : url}${"/page/" + item}`
+                    : `${item}`
+                }
               >
                 {item}
               </a>

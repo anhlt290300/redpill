@@ -6,6 +6,7 @@ import Footer from "./pasts/Footer";
 const UserLayout = () => {
   //const comments = getCommentByBlogId1(1);
   const { categories, recentposts, recentcomment } = useLoaderData();
+  console.log(recentcomment);
   const [search, setSearch] = useState("");
   return (
     <div className=" overflow-x-hidden font-mono">
@@ -18,7 +19,7 @@ const UserLayout = () => {
           <div className="col-span-1 flex flex-col gap-6">
             <div className="flex flex-col justify-start gap-2">
               <p>Search</p>
-              <div className="flex justify-between items-center gap-4">
+              <form className="flex justify-between items-center gap-4">
                 <input
                   type="text"
                   value={search}
@@ -31,7 +32,7 @@ const UserLayout = () => {
                 >
                   Search
                 </a>
-              </div>
+              </form>
             </div>
             {/* recent posts */}
             <div className="flex flex-col gap-4">
@@ -40,7 +41,7 @@ const UserLayout = () => {
                 recentposts.map((item, index) => {
                   return (
                     <a
-                      href={`/${item.slugBlog}`}
+                      href={`/${item.slugCategory}/${item.slugBlog}`}
                       key={index}
                       className="text-lg text-blue-600 hover:text-red-500"
                     >
@@ -50,7 +51,7 @@ const UserLayout = () => {
                 })}
             </div>
             {/* Recent Comments */}
-            <div className="flex flex-col gap-4">
+            {/* <div className="flex flex-col gap-4">
               <p className="text-2xl font-semibold mb-2">Recent Comments</p>
               {recentcomment.length > 0 &&
                 recentcomment.map((item, index) => {
@@ -68,7 +69,7 @@ const UserLayout = () => {
                     </p>
                   );
                 })}
-            </div>
+            </div> */}
             {/* Categories */}
             <div className="flex flex-col gap-4">
               <p className="text-2xl font-semibold mb-2">Categories</p>
